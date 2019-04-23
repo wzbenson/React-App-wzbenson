@@ -8,7 +8,8 @@ class Square extends React.Component {
   }
   render() {
     return (
-      <button className="square">
+      <button className="square"
+               onClick={() => this.props.onClick()} >
         {this.props.value}
       </button>
     );
@@ -60,10 +61,11 @@ class Board extends React.Component {
     }
   }
   handelClick(i) {
-    alert(i);
+    console.log("click " + i + " square = " + this.getSquare(i));
     if (this.getSquare(i) == null) {
       this.setSquare(i,this.turn);
       this.changeTurn();
+      console.log("now player " + this.turn);
     }
   }
   renderSquare(i) {

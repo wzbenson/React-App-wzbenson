@@ -31,7 +31,7 @@ class Board extends React.Component {
     }
   }
 
-  get square(i) {
+  getSquare(i) {
     return this.state.squares[i];
   }
 

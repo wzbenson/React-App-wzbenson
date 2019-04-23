@@ -32,7 +32,8 @@ class Board extends React.Component {
   setSquare(i,value) {
     let squares = this.state.squares.slice();
     squares[i]=value;
-    this.setState({'squares' : squares});
+    this.setState({squares : squares});
+    console.log('setSquare(' + i + ',' + value + ') new squares: ' + squares);
   }
   changeTurn() {
     let turn = this.state.turn;
@@ -41,14 +42,17 @@ class Board extends React.Component {
     } else {
       turn = 'X';
     }
+    console.log('new turn: ' + turn);
     this.setState({'turn': turn});
   }
+
   handelClick(i) {
     if (this.getSquare(i) == null) {
-      this.setSquare(i,this.turn);
+      this.setSquare(i,this.state.turn);
       this.changeTurn();
     }
   }
+
   renderSquare(i) {
     return <Square value={this.state.squares[i]} 
                    onClick={()=>this.handelClick(i)} />;

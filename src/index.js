@@ -16,15 +16,15 @@ class Square extends React.Component {
 }
 
 class Board extends React.Component {
-  contructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
-      squares: Array(9).fill(null),
+      squares : Array(9).fill(null),
       turn : 'X'
     }
   }
 
-  get state() {
+  cloneState() {
     return {
       squares: this.squares,
       turn: this.turn
@@ -36,7 +36,7 @@ class Board extends React.Component {
   }
 
   setSquare(i,value) {
-    let state = this.state;
+    let state = this.cloneState();
     state.squares[i]=value;
     this.setState(state);
   }
@@ -48,12 +48,12 @@ class Board extends React.Component {
     return this.state.turn;
   }
   set turn(value) {
-    let state = this.state
+    let state = this.cloneState();
     state.turn = value;
-    this.setState
+    this.setState(state);
   }
-  changeTurn(){
-    if(this.turn == 'X') {
+  changeTurn() {
+    if (this.turn == 'X') {
       this.turn = 'O';
     } else {
       this.turn = 'X';
@@ -61,14 +61,14 @@ class Board extends React.Component {
   }
   handelClick(i) {
     alert(i);
-    if(this.getSquare[i] == null){
-      this.setSquare(i)=this.turn;
+    if (this.getSquare(i) == null) {
+      this.setSquare(i,this.turn);
       this.changeTurn();
+    }
   }
-}
   renderSquare(i) {
-    return <Square value={this.state.squares[i]}
-                    onClick={()=>this.handelClick(i)} />;
+    return <Square value={this.state.squares[i]} 
+                   onClick={()=>this.handelClick(i)} />;
   }
 
   render() {

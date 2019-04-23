@@ -66,6 +66,7 @@ class Board extends React.Component {
       this.setSquare(i,this.turn);
       this.changeTurn();
       console.log("now player " + this.turn);
+      console.log("state: " + JSON.stringify(this.state));
     }
   }
   renderSquare(i) {

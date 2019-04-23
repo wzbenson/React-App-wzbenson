@@ -25,48 +25,28 @@ class Board extends React.Component {
     }
   }
 
-  cloneState() {
-    return {
-      squares: this.squares,
-      turn: this.turn
-    }
-  }
-
   getSquare(i) {
     return this.state.squares[i];
   }
 
   setSquare(i,value) {
-    let state = this.cloneState();
-    state.squares[i]=value;
-    this.setState(state);
-  }
-
-  get squares() {
-    return this.state.squares.slice();
-  }
-  get turn() {
-    return this.state.turn;
-  }
-  set turn(value) {
-    let state = this.cloneState();
-    state.turn = value;
-    this.setState(state);
+    let squares = this.state.squares.slice();
+    squares[i]=value;
+    this.setState({'squares' : squares});
   }
   changeTurn() {
-    if (this.turn == 'X') {
-      this.turn = 'O';
+    let turn = this.state.turn;
+    if (turn == 'X') {
+      turn = 'O';
     } else {
-      this.turn = 'X';
+      turn = 'X';
     }
+    this.setState({'turn': turn});
   }
   handelClick(i) {
-    console.log("click " + i + " square = " + this.getSquare(i));
     if (this.getSquare(i) == null) {
       this.setSquare(i,this.turn);
       this.changeTurn();
-      console.log("now player " + this.turn);
-      console.log("state: " + JSON.stringify(this.state));
     }
   }
   renderSquare(i) {

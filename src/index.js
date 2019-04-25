@@ -9,7 +9,7 @@ class Square extends React.Component {
   render() {
     return (
       <button className="square"
-               onClick={() => this.props.onClick()} >
+        onClick={() => this.props.onClick()} >
         {this.props.value}
       </button>
     );
@@ -20,19 +20,53 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      squares : Array(9).fill(null),
-      turn : 'X'
+      squares: Array(9).fill(null),
+      turn: 'X',
+      won: null
     }
+  }
+
+  windir(who, dir) {
+    let n = 0
+    for (let i = 0; i < 3; ++i) {
+      let r = dir.r0 + i * dir.dr;
+      let c = dir.c0 + i * dir.dc;
+      let rc = this.state.squares[3 * r + c];
+      if (rc == who) {
+        ++n;
+      }
+    }
+    return n == 3;
+  }
+
+  win(player) {
+    for (let row = 0; row < 3; ++row) {
+      if (this.windir(player, { r0: row, dr: 0, c0: 0, dc: 1 })) {
+        return true; // column
+      }
+    }
+    for (let col = 0; col < 3; ++col) {
+      if (this.windir(player, { r0: 0, dr: 1, c0: col, dc: 0 })) {
+        return true; // column
+      }
+    }
+    if (this.windir(player, { r0: 0, dr: 1, c0: 0, dc: 1 })) {
+      return true; // diagonal
+    }
+    if (this.windir(player, { r0: 0, dr: 1, c0: 2, dc: -1 })) {
+      return true; // off diagonal
+    }
+    return false;
   }
 
   getSquare(i) {
     return this.state.squares[i];
   }
 
-  setSquare(i,value) {
+  setSquare(i, value) {
     let squares = this.state.squares.slice();
-    squares[i]=value;
-    this.setState({squares : squares});
+    squares[i] = value;
+    this.setState({ 'squares': squares });
     console.log('setSquare(' + i + ',' + value + ') new squares: ' + squares);
   }
   changeTurn() {
@@ -43,19 +77,28 @@ class Board extends React.Component {
       turn = 'X';
     }
     console.log('new turn: ' + turn);
-    this.setState({'turn': turn});
+    this.setState({ 'turn': turn });
   }
 
   handelClick(i) {
     if (this.getSquare(i) == null) {
-      this.setSquare(i,this.state.turn);
-      this.changeTurn();
+      this.setSquare(i, this.state.turn);
+      if (this.win(this.state.turn)) {
+        alert('you won!');
+        this.setState({
+          squares: Array(9).fill(null),
+          turn: 'X',
+          won: null
+        })
+      } else {
+        this.changeTurn();
+      }
     }
   }
 
   renderSquare(i) {
-    return <Square value={this.state.squares[i]} 
-                   onClick={()=>this.handelClick(i)} />;
+    return <Square value={this.state.squares[i]}
+      onClick={() => this.handelClick(i)} />;
   }
 
   render() {

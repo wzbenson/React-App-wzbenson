@@ -88,7 +88,7 @@ class Board extends React.Component {
   }
 
   handelClick(i) {
-    if (this.getSquare(i) == null) {
+    if (this.state.win == null && this.getSquare(i) == null) {
       this.setSquare(i, this.state.turn);
       this.changeTurn();
     }
@@ -101,9 +101,20 @@ class Board extends React.Component {
 
   render() {
     let status;
-    if (this.win('X')) {
+    let win = this.state.win;
+    if (win == null) {
+      if (this.win('X')) {
+        win = 'X';
+      } else if (this.win('O')) {
+        win = 'O';
+      }
+    }
+    if (win != this.state.win) {
+      this.setState({'win': win});
+    }
+    if (win == 'X') {
       status = 'X won!';
-    } else if (this.win('O')) {
+    } else if (win == 'O') {
       status = 'O won!';
     } else {
       status = 'Next player: ' + this.state.turn;

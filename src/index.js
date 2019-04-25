@@ -33,26 +33,33 @@ class Board extends React.Component {
       let c = dir.c0 + i * dir.dc;
       let rc = this.state.squares[3 * r + c];
       if (rc == who) {
+        console.log("r=" + r + "c=" + c + " is mine");
         ++n;
       }
+      console.log("r=" + r + "c=" + c + " is " + rc);
     }
     return n == 3;
   }
 
   win(player) {
     for (let row = 0; row < 3; ++row) {
+      console.log("check row " + row);
       if (this.windir(player, { r0: row, dr: 0, c0: 0, dc: 1 })) {
-        return true; // column
+        return true; // row
       }
     }
     for (let col = 0; col < 3; ++col) {
+      console.log("check col " + col);
       if (this.windir(player, { r0: 0, dr: 1, c0: col, dc: 0 })) {
         return true; // column
       }
     }
+    console.log("check diagonal");
     if (this.windir(player, { r0: 0, dr: 1, c0: 0, dc: 1 })) {
       return true; // diagonal
     }
+
+    console.log("check off diagonal");
     if (this.windir(player, { r0: 0, dr: 1, c0: 2, dc: -1 })) {
       return true; // off diagonal
     }
@@ -83,16 +90,7 @@ class Board extends React.Component {
   handelClick(i) {
     if (this.getSquare(i) == null) {
       this.setSquare(i, this.state.turn);
-      if (this.win(this.state.turn)) {
-        alert('you won!');
-        this.setState({
-          squares: Array(9).fill(null),
-          turn: 'X',
-          won: null
-        })
-      } else {
-        this.changeTurn();
-      }
+      this.changeTurn();
     }
   }
 
@@ -102,8 +100,14 @@ class Board extends React.Component {
   }
 
   render() {
-    const status = 'Next player R1: X';
-
+    let status;
+    if (this.win('X')) {
+      status = 'X won!';
+    } else if (this.win('O')) {
+      status = 'O won!';
+    } else {
+      status = 'Next player: ' + this.state.turn;
+    }
     return (
       <div>
         <div className="status">{status}</div>

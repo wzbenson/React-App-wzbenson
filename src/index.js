@@ -109,9 +109,6 @@ class Board extends React.Component {
         win = 'O';
       }
     }
-    if (win != this.state.win) {
-      this.setState({'win': win});
-    }
     if (win == 'X') {
       status = 'X won!';
     } else if (win == 'O') {

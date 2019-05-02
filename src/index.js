@@ -101,7 +101,7 @@ class Board extends React.Component {
 
   render() {
     let status;
-    let win = this.state.win;
+    let win = null;
     if (win == null) {
       if (this.win('X')) {
         win = 'X';
